@@ -305,6 +305,6 @@ jobs:
         repo_token: '${{ secrets.GITHUB_TOKEN }}'
         automatic_release_tag: '${{inputs.branch}}'
         prerelease: true
-        title: '${{input.repo}} ${{inputs.branch}}'
+        title: '${{inputs.repo}} ${{inputs.branch}}'
         files: ${{env.ARTIFACT_NAME}}
     # Publish END
