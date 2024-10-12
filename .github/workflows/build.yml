@@ -12,6 +12,10 @@ name: "Build Browser"
 on:
   workflow_dispatch:
     inputs:
+      name:
+        type: string
+        description: browser name
+        required: true
       repo:
         type: string
         description: repo url
@@ -200,12 +204,6 @@ jobs:
             cp ./browser/branding/beta/locales/en-US/brand.properties $PWD/floorp/browser/locales/l10n-central/$dir/browser/branding/beta/brand.properties
           done
 
-    - name: Change Release Note URL
-      if: inputs.release-note-url
-      run: |
-        sed -i 's|https://astian.org/midori-en/|${{inputs.release-note-url}}|g' ./browser/branding/official/pref/firefox-branding.js
-        echo "$(cat ./browser/branding/official/pref/firefox-branding.js)"
-
     - name: Build 🔨
       continue-on-error: true
       run: |
@@ -252,17 +250,17 @@ jobs:
         fi
 
         if [[ $GHA_zstd != 'true' ]];then
-          cp obj-${arch}-pc-windows-msvc/dist/install/sea/midori-*.en-US.${arch_inst}.installer-stub.exe ~/output/midori-stub.installer.exe
-          cp obj-${arch}-pc-windows-msvc/dist/midori-*.en-US.${arch_inst}.zip ~/output/
-          cp obj-${arch}-pc-windows-msvc/dist/install/sea/midori-*.en-US.${arch_inst}.installer.exe ~/output/midori-${arch_inst}.installer.exe
+          cp obj-${arch}-pc-windows-msvc/dist/install/sea/${{inputs.name}}-*.en-US.${arch_inst}.installer-stub.exe ~/output/midori-stub.installer.exe
+          cp obj-${arch}-pc-windows-msvc/dist/${{inputs.name}}-*.en-US.${arch_inst}.zip ~/output/
+          cp obj-${arch}-pc-windows-msvc/dist/install/sea/${{inputs.name}}-*.en-US.${arch_inst}.installer.exe ~/output/midori-${arch_inst}.installer.exe
         else
-          cp obj-${arch}-pc-windows-msvc/dist/midori-*.en-US.${arch_inst}.zip ~/output/
-          7z x ~/output/midori-*.en-US.${arch_inst}.zip
-          tar -I "zstd -T4 -10" --remove-files -cvf ~/output/midori-$(cat browser/config/version.txt).en-us.${arch_inst}.tar.zst midori
-          rm ~/output/midori-*.en-US.${arch_inst}.zip
+          cp obj-${arch}-pc-windows-msvc/dist/${{inputs.name}}-*.en-US.${arch_inst}.zip ~/output/
+          7z x ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
+          tar -I "zstd -T4 -10" --remove-files -cvf ~/output/${{inputs.name}}-$(cat browser/config/version.txt).en-us.${arch_inst}.tar.zst midori
+          rm ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
         fi
         #? Original code used in daily b with update
-        # cp -r obj-x86_64-pc-mingw32/dist/midori ~/output/
+        # cp -r obj-x86_64-pc-mingw32/dist/${{inputs.name}} ~/output/
       env:
         GHA_aarch64: ${{inputs.aarch64}}
         GHA_zstd: ${{inputs.zstd}}
@@ -297,7 +295,7 @@ jobs:
         fs.appendFileSync(process.env.GITHUB_ENV, `ARTIFACT_NAME=${name}`);
       env:
         GHA_out_artifact_name : ${{inputs.out_artifact_name}}
-        GHA_default_name: midori-windows-${{fromJson('["x86","aarch"]')[inputs.aarch64]}}-${{fromJson('["package","build-with-profgen"]')[inputs.profgen]}}${{fromJson('["","-zstd"]')[inputs.zstd]}}
+        GHA_default_name: ${{inputs.name}}-windows-${{fromJson('["x86","aarch"]')[inputs.aarch64]}}-${{fromJson('["package","build-with-profgen"]')[inputs.profgen]}}${{fromJson('["","-zstd"]')[inputs.zstd]}}
 
     - name: Create Release
       uses: "marvinpinto/action-automatic-releases@latest"
