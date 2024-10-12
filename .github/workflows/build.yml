@@ -301,7 +301,7 @@ jobs:
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: '${{ secrets.GITHUB_TOKEN }}'
-        automatic_release_tag: '${{inputs.branch}}'
+        automatic_release_tag: '${{inputs.name}}-${{inputs.branch}}'
         prerelease: true
         title: '${{inputs.repo}} ${{inputs.branch}}'
         files: ${{env.ARTIFACT_NAME}}
