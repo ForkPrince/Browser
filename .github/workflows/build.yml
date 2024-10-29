@@ -82,6 +82,17 @@ jobs:
       with:
         node-version: "lts/*"
 
+    - name: Check Argument Compatibility
+      shell: node {0}
+      env:
+        GHA_profgen: ${{inputs.profgen}}
+        GHA_aarch64: ${{inputs.aarch64}}
+        GHA_zstd: ${{inputs.zstd}}
+        GHA_beta: ${{inputs.beta}}
+        GHA_mar: ${{inputs.mar}}
+        GHA_profdata_jarlog_artifact_name: ${{inputs.profdata_jarlog_artifact_name}}
+        GHA_out-artifact-name: ${{inputs.out_artifact_name}}
+
     - name: Change PPA mirror servers
       run: |
         sudo perl -p -i -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://archive.ubuntu.com/ubuntu/%' /etc/apt/sources.list
