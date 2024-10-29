@@ -84,7 +84,8 @@ jobs:
 
     - name: Check Argument Compatibility
       shell: node {0}
-      run: echo hello
+      run: |
+        echo 'hello'
       env:
         GHA_profgen: ${{inputs.profgen}}
         GHA_aarch64: ${{inputs.aarch64}}
