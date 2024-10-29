@@ -84,7 +84,12 @@ jobs:
 
     - name: Check Argument Compatibility
       shell: node {0}
-      run: echo "Hello, GitHub Actions!"
+      run: |
+        //profgen and use-profdata is not compatible
+        if (
+          process.env.GHA_profgen == "true"
+          && process.env.GHA_profdata_jarlog_artifact_name != ""
+        ) {process.exit(-1);}
       env:
         GHA_profgen: ${{inputs.profgen}}
         GHA_aarch64: ${{inputs.aarch64}}
