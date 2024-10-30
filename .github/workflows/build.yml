@@ -112,7 +112,7 @@ jobs:
 
           cp obj-${arch}-pc-windows-msvc/dist/${{inputs.name}}-*.en-US.${arch_inst}.zip ~/output/
           7z x ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
-          tar -I "zstd -T4 -10" --remove-files -cvf ~/output/${{inputs.name}}-$(cat browser/config/version.txt).en-us.${arch_inst}.tar.zst midori
+          tar -I "zstd -T4 -10" --remove-files -cvf ~/output/${{inputs.name}}-$(cat browser/config/version.txt).en-us.${arch_inst}.tar.zst ${{inputs.name}}
           rm ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
 
       - name: make name of publish archive
