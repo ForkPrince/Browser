@@ -131,10 +131,10 @@ jobs:
           path: ~/output
 
       - name: Create Release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: ncipollo/release-action@v1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: '${{inputs.name}}-${{inputs.branch}}'
+          tag: '${{inputs.name}}-${{inputs.branch}}'
           prerelease: true
-          title: '${{inputs.repo}} ${{inputs.branch}}'
-          files: ${{env.ARTIFACT_NAME}}
+          name: '${{inputs.repo}} ${{inputs.branch}}'
+          artifacts: ${{env.ARTIFACT_NAME}}
