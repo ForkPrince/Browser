@@ -124,6 +124,12 @@ jobs:
         env:
           GHA_default_name: ${{inputs.name}}-windows-aarch
 
+      - name: Publish Package🎁
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{env.ARTIFACT_NAME}}
+          path: ~/output
+
       - name: Create Release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
