@@ -88,6 +88,9 @@ jobs:
         run: |
           rustup target add aarch64-pc-windows-msvc --toolchain stable
 
+          echo '[target.aarch64-pc-windows-msvc]' >> ~/.cargo/config
+          echo 'linker = "rust-lld"' >> ~/.cargo/config
+
           export CARGO_INCREMENTAL=0
 
       - name: Build 🔨
