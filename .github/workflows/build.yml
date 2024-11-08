@@ -36,25 +36,25 @@ jobs:
           sudo apt update
 
       - uses: actions/checkout@v4
-        name: Clone 🧬
+        name: Clone
         with:
           submodules: 'recursive'
           repository: ${{inputs.repo}}
           ref: ${{inputs.branch}}
 
-      - name: Setup Disk & Swap Space 💿
+      - name: Setup Disk & Swap Space
         run: |
           chmod +x .github/workflows/src/disk_swap_for_github_runner.sh
           .github/workflows/src/disk_swap_for_github_runner.sh
 
-      - name: Configure sccache
+      - name: Configure Cache
         uses: actions/github-script@v7
         with:
           script: |
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
-      - name: Setup 🪛
+      - name: Setup
         run: |
           mkdir -p ~/win-cross
 
@@ -84,7 +84,7 @@ jobs:
           echo "DISPLAY_VERSION=$(cat ./browser/config/version_display.txt)" >> $GITHUB_ENV
           echo "UPDATE_CHANNEL=release" >> $GITHUB_ENV
 
-      - name: setup Rust 🦀
+      - name: Setup Rust
         run: |
           rustup target add aarch64-pc-windows-msvc --toolchain stable
 
@@ -98,22 +98,21 @@ jobs:
         if: failure()
         run: ./mach build
 
-      - name: Package 📦
+      - name: Package
         run: |
           ./mach package
           ./mach build
           ./mach package-multi-locale --locales ar cs da de el en-US en-GB es-ES fr hu id it ja ko lt nl nn-NO pl pt-BR pt-PT ru sv-SE th tr uk vi zh-CN zh-TW
 
-      - name: Copy 📂
+      - name: Copy
         run: |
           mkdir ~/output
           arch="aarch64"
           arch_inst="win64-aarch64"
 
+          cp obj-${arch}-pc-windows-msvc/dist/install/sea/${{inputs.name}}-*.en-US.${arch_inst}.installer-stub.exe ~/output/${{inputs.name}}-stub.installer.exe
           cp obj-${arch}-pc-windows-msvc/dist/${{inputs.name}}-*.en-US.${arch_inst}.zip ~/output/
-          7z x ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
-          tar -I "zstd -T4 -10" --remove-files -cvf ~/output/${{inputs.name}}-$(cat browser/config/version.txt).en-us.${arch_inst}.tar.zst ${{inputs.name}}
-          rm ~/output/${{inputs.name}}-*.en-US.${arch_inst}.zip
+          cp obj-${arch}-pc-windows-msvc/dist/install/sea/${{inputs.name}}-*.en-US.${arch_inst}.installer.exe ~/output/${{inputs.name}}-${arch_inst}.installer.exe
 
       - name: make name of publish archive
         shell: node {0}
@@ -124,7 +123,7 @@ jobs:
         env:
           GHA_default_name: ${{inputs.name}}-windows-aarch
 
-      - name: Publish Package🎁
+      - name: Publish Package
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.ARTIFACT_NAME}}
