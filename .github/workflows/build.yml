@@ -91,7 +91,6 @@ jobs:
           export CARGO_INCREMENTAL=0
 
       - name: Build 🔨
-        continue-on-error: true
         run: ./mach build
 
       - name: Retry Build if 1st build is failed 🔨
