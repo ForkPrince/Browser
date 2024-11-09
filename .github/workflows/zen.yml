@@ -1,6 +1,6 @@
-name: Windows Release Build
+name: Build Zen
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       build-version:
         description: 'The version to build'
