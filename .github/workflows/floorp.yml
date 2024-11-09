@@ -1,6 +1,6 @@
 permissions: write-all
 
-name: "Build Browser"
+name: "Build Floorp"
 
 on:
   workflow_dispatch:
