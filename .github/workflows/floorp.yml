@@ -40,7 +40,7 @@ jobs:
         with:
           submodules: 'recursive'
           repository: ${{inputs.repo}}
-          ref: ${{inputs.branch}}
+          # ref: ${{inputs.branch}}
 
       - name: Setup Disk & Swap Space
         run: |
